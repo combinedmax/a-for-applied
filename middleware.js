@@ -5,6 +5,8 @@ export function middleware(req) {
 	const requestOrigin =
 		req.headers.get("referer") || req.headers.get("origin");
 
+	console.log("Request from:", requestOrigin); // Debugging log
+
 	if (!requestOrigin || !requestOrigin.startsWith(allowedOrigin)) {
 		return new NextResponse("Access Denied", { status: 403 });
 	}
@@ -13,5 +15,5 @@ export function middleware(req) {
 }
 
 export const config = {
-	matcher: "/:path*", // Apply middleware to all routes
+	matcher: "/(.*)", // Apply middleware to all routes
 };
