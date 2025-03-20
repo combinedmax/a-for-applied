@@ -16,6 +16,7 @@ export function middleware(req) {
 		".gif",
 		".svg",
 		".ico",
+		".json",
 	];
 	if (assetExtensions.some((ext) => req.nextUrl.pathname.endsWith(ext))) {
 		return NextResponse.next();
