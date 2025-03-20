@@ -3,10 +3,12 @@ import { NextResponse } from "next/server";
 export function middleware(req) {
 	const allowedReferer = "syzygy.lk";
 	const requestReferer = req.headers.get("referer");
+	const host = req.headers.get("host");
 
-	console.log("Request Referer:", requestReferer); // Debugging log
+	console.log("Request Referer:", requestReferer);
+	console.log("Host:", host);
 
-	// Allow assets (JS, CSS, Images) to load
+	// Allow assets (JS, CSS, Images, JSON) to load
 	const assetExtensions = [
 		".js",
 		".css",
@@ -19,6 +21,11 @@ export function middleware(req) {
 		".json",
 	];
 	if (assetExtensions.some((ext) => req.nextUrl.pathname.endsWith(ext))) {
+		return NextResponse.next();
+	}
+
+	// Allow internal navigation within the app
+	if (requestReferer && requestReferer.includes(host)) {
 		return NextResponse.next();
 	}
 
