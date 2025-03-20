@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-	const allowedOrigin = "https://syzygy.lk";
-	const requestOrigin =
-		req.headers.get("referer") || req.headers.get("origin");
+	const allowedReferer = "https://syzygy.lk";
+	const requestReferer = req.headers.get("referer");
 
-	console.log("Request from:", requestOrigin); // Debugging log
+	console.log("Request Referer:", requestReferer); // Debugging log
 
-	if (!requestOrigin || !requestOrigin.startsWith(allowedOrigin)) {
+	// Block if no referer (user typed URL manually) or referer is not syzygy.lk
+	if (!requestReferer || !requestReferer.startsWith(allowedReferer)) {
 		return new NextResponse("Access Denied", { status: 403 });
 	}
 
