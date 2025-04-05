@@ -68,5 +68,31 @@
 			"title": "Q11, Q12, Q14, Q15a & Q17",
 			"guid": "c986f463-5943-4ed5-ae10-d2806db8db9c"
 		}
+	],
+	"section6": [
+		{
+			"title": "P12a Part 1",
+			"guid": "8b4c0467-538a-4fea-9fa0-ada2dfca5a3f"
+		},
+		{
+			"title": "P12a Part 2",
+			"guid": "c6455012-2cbd-469d-b023-5c35b0c82e7d"
+		},
+		{
+			"title": "P12a Part 3",
+			"guid": "2f171f41-a0c2-48bb-9d23-7f5da5d20f30"
+		},
+		{
+			"title": "P12a Part 4",
+			"guid": "5f42eae9-97e0-42b0-9eed-8ab32b6dc702"
+		},
+		{
+			"title": "P12a Part 5",
+			"guid": "82b0a7a2-dfe3-4aad-be9c-3e061f2581e7"
+		},
+		{
+			"title": "P12a Part 6",
+			"guid": "5bdaa5f6-5a95-4704-9dcc-135f69365de0"
+		}
 	]
 }
