@@ -94,5 +94,51 @@
 			"title": "P12a Part 6",
 			"guid": "5bdaa5f6-5a95-4704-9dcc-135f69365de0"
 		}
+	],
+	"section7": [
+		{
+			"title": "P02 Video 1",
+			"guid": "8e948eff-9e87-4ce8-b2d8-8dd787ae92c7"
+		},
+		{
+			"title": "P02 Video 2",
+			"guid": "7f68a86e-76fd-40c8-925c-c9baa4d4ad4d"
+		},
+		{
+			"title": "P02 Video 3",
+			"guid": "cb96eaaa-b172-43b5-aa01-ae53ab9bf5d3"
+		},
+		{
+			"title": "P02 Video 4",
+			"guid": "92354896-d3ad-496a-9073-aa9f2c7e8b1d"
+		},
+		{
+			"title": "P02 Video 5",
+			"guid": "926efa95-89c6-4bb6-b142-1223b4fa4e3f"
+		},
+		{
+			"title": "P02 Video 6",
+			"guid": "c16d076b-092b-41f8-b963-7795abcbee04"
+		},
+		{
+			"title": "P02 Video 7",
+			"guid": "d2c01d50-69ca-4281-8644-21c11a7cfc5c"
+		},
+		{
+			"title": "P02 Video 8",
+			"guid": "52225abb-1cb4-497b-a471-361ae962b2ae"
+		},
+		{
+			"title": "P02 Video 9",
+			"guid": "5bb646ed-7910-41a5-8bc5-6bc688cf71ac"
+		},
+		{
+			"title": "P02 Video 10",
+			"guid": "d4f9b494-438b-4726-bf53-40b3617bf7a4"
+		},
+		{
+			"title": "P02 Video 11",
+			"guid": "dd2636fc-71e5-475d-9a3e-afc4989da61c"
+		}
 	]
 }
