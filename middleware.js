@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-	const allowedReferer = ["syzygy.lk", "combinedmax.com"];
+	const allowedReferer = [
+		"syzygy.lk",
+		"combinedmax.com",
+		"cmax-vid.vercel.app",
+	];
 	const requestReferer = req.headers.get("referer");
 	const host = req.headers.get("host");
 
