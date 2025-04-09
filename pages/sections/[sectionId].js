@@ -69,6 +69,10 @@ export default function SectionPage() {
 						}}
 						passHref
 					>
+							<a
+              							target="_blank" // Opens the link in a new tab
+              							rel="noopener noreferrer" // Adds security to prevent reverse tabnabbing
+            						>
 						<button
 							style={{
 								background: "#ffcc00",
