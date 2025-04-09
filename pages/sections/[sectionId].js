@@ -62,32 +62,33 @@ export default function SectionPage() {
 			<div>
 				{videos.map((video, index) => (
 					<Link
-						key={video.guid}
-						href={{
-							pathname: `/videos/${video.guid}`,
-							query: { sectionId: sectionId }, // Pass the sectionId
-						}}
-						passHref
-					>
-							<a
-              							target="_blank" // Opens the link in a new tab
-              							rel="noopener noreferrer" // Adds security to prevent reverse tabnabbing
-            						>
-						<button
-							style={{
-								background: "#ffcc00",
-								color: "black",
-								padding: "10px 20px",
-								margin: "10px",
-								border: "none",
-								borderRadius: "5px",
-								cursor: "pointer",
-								fontWeight: "bold",
-							}}
-						>
-							{video.title}
-						</button>
-					</Link>
+  key={video.guid}
+  href={{
+    pathname: `/videos/${video.guid}`,
+    query: { sectionId: sectionId },
+  }}
+  passHref
+>
+  <a
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      display: "inline-block",
+      background: "#ffcc00",
+      color: "black",
+      padding: "10px 20px",
+      margin: "10px",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontWeight: "bold",
+      textDecoration: "none",
+    }}
+  >
+    {video.title}
+  </a>
+</Link>
+
 				))}
 			</div>
 		</div>
