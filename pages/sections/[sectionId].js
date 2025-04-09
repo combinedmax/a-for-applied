@@ -61,34 +61,26 @@ export default function SectionPage() {
 			{/* List of Videos as Buttons */}
 			<div>
 				{videos.map((video, index) => (
-					<Link
-  key={video.guid}
-  href={{
-    pathname: `/videos/${video.guid}`,
-    query: { sectionId: sectionId },
-  }}
-  passHref
->
-  <a
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{
-      display: "inline-block",
-      background: "#ffcc00",
-      color: "black",
-      padding: "10px 20px",
-      margin: "10px",
-      border: "none",
-      borderRadius: "5px",
-      cursor: "pointer",
-      fontWeight: "bold",
-      textDecoration: "none",
-    }}
-  >
-    {video.title}
-  </a>
-</Link>
-
+					<a
+						key={video.guid}
+						href={`/videos/${video.guid}?sectionId=${sectionId}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						style={{
+							display: "inline-block",
+							background: "#ffcc00",
+							color: "black",
+							padding: "10px 20px",
+							margin: "10px",
+							border: "none",
+							borderRadius: "5px",
+							cursor: "pointer",
+							fontWeight: "bold",
+							textDecoration: "none",
+						}}
+					>
+						{video.title}
+					</a>
 				))}
 			</div>
 		</div>
