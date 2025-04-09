@@ -140,5 +140,27 @@
 			"title": "P02 Video 11",
 			"guid": "dd2636fc-71e5-475d-9a3e-afc4989da61c"
 		}
+	],
+	"section8": [
+		{
+			"title": "P17.4 Video 1",
+			"guid": "af19291f-d7f4-44b5-9cf7-dbb00d3cdcab"
+		},
+		{
+			"title": "P17.4 Video 2",
+			"guid": "4e686190-b3ef-46c6-83a8-99030b3ac774"
+		},
+		{
+			"title": "P17.4 Video 3",
+			"guid": "e56d5421-e240-41b9-b3f3-f36122b65d19"
+		},
+		{
+			"title": "P17.4 Video 4",
+			"guid": "b03a76b1-0608-45f1-9dfd-2514379cbfa1"
+		},
+		{
+			"title": "P17.4 Video 5",
+			"guid": "b03a76b1-0608-45f1-9dfd-2514379cbfa1"
+		}
 	]
 }
