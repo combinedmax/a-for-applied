@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-	const allowedReferer = "syzygy.lk";
+	const allowedReferer = ["syzygy.lk", "combinedmax.com"];
 	const requestReferer = req.headers.get("referer");
 	const host = req.headers.get("host");
 
@@ -30,9 +30,9 @@ export function middleware(req) {
 	}
 
 	// Block if no referer (user typed URL manually) or referer does not contain syzygy.lk
-	if (!requestReferer || !requestReferer.includes(allowedReferer)) {
-		return new NextResponse("Access Denied", { status: 403 });
-	}
+	if (!requestReferer || !allowedReferers.some((referer) => requestReferer.includes(referer))) {
+    		return new NextResponse("Access Denied", { status: 403 });
+  	}
 
 	return NextResponse.next();
 }
