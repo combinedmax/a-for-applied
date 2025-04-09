@@ -30,10 +30,9 @@ export function middleware(req) {
 	}
 
 	// Block if no referer (user typed URL manually) or referer does not contain syzygy.lk
-	if (!requestReferer || !allowedReferers.some((referer) => requestReferer.includes(referer))) {
-    		return new NextResponse("Access Denied", { status: 403 });
-  	}
-
+	if (!requestReferer || !requestReferer.includes(allowedReferer)) {
+		return new NextResponse("Access Denied", { status: 403 });
+	}
 	return NextResponse.next();
 }
 
