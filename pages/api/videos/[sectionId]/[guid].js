@@ -1,3 +1,4 @@
+// [guid].js
 import jwt from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
@@ -25,17 +26,29 @@ export default async function handler(req, res) {
 		return res.status(404).json({ error: "Video not found" });
 	}
 
-	// Generate secured URL
+	// Generate token (valid for all resolutions)
 	const token = jwt.sign(
-		{ exp: Math.floor(Date.now() / 1000) + 3600, v: video.guid },
+		{ exp: Math.floor(Date.now() / 1000) + 3600, v: guid },
 		BUNNY_AUTH_KEY
 	);
 
-	const securedUrl = `https://${BUNNY_CDN_URL}/${video.guid}/playlist.m3u8?token=${token}`;
+	// Define available resolutions (you might want to make this dynamic)
+	const resolutions = [
+		{ quality: "360p", height: 360 },
+		{ quality: "720p", height: 720 },
+	];
+
+	// Create secured URLs for each resolution
+	const securedUrls = resolutions.map((res) => ({
+		quality: res.quality,
+		height: res.height,
+		url: `https://${BUNNY_CDN_URL}/${guid}/${res.quality}/video.m3u8?token=${token}`,
+	}));
 
 	res.status(200).json({
 		title: video.title,
 		guid: video.guid,
-		securedUrl,
+		securedUrls, // Now returns an array of URLs
+		defaultQuality: "360p", // You can set a default
 	});
 }

@@ -67,24 +67,20 @@ export default function SectionPage() {
 							pathname: `/videos/${video.guid}`,
 							query: { sectionId: sectionId },
 						}}
-						passHref
+						style={{
+							display: "inline-block",
+							background: "#ffcc00",
+							color: "black",
+							padding: "10px 20px",
+							margin: "10px",
+							border: "none",
+							borderRadius: "5px",
+							cursor: "pointer",
+							fontWeight: "bold",
+							textDecoration: "none",
+						}}
 					>
-						<a
-							style={{
-								display: "inline-block",
-								background: "#ffcc00",
-								color: "black",
-								padding: "10px 20px",
-								margin: "10px",
-								border: "none",
-								borderRadius: "5px",
-								cursor: "pointer",
-								fontWeight: "bold",
-								textDecoration: "none",
-							}}
-						>
-							{video.title}
-						</a>
+						{video.title}
 					</Link>
 				))}
 			</div>
