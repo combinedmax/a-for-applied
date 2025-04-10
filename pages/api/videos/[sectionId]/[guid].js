@@ -26,16 +26,17 @@ export default async function handler(req, res) {
 		return res.status(404).json({ error: "Video not found" });
 	}
 
-	// Generate token (valid for all resolutions)
+	// Generate token with longer expiration (6 hours)
 	const token = jwt.sign(
-		{ exp: Math.floor(Date.now() / 1000) + 3600, v: guid },
+		{ exp: Math.floor(Date.now() / 1000) + 21600, v: guid }, // 6 hours
 		BUNNY_AUTH_KEY
 	);
 
-	// Define available resolutions (you might want to make this dynamic)
+	// Define available resolutions
 	const resolutions = [
 		{ quality: "360p", height: 360 },
 		{ quality: "720p", height: 720 },
+		// Add more resolutions if available
 	];
 
 	// Create secured URLs for each resolution
@@ -48,7 +49,7 @@ export default async function handler(req, res) {
 	res.status(200).json({
 		title: video.title,
 		guid: video.guid,
-		securedUrls, // Now returns an array of URLs
-		defaultQuality: "360p", // You can set a default
+		securedUrls,
+		defaultQuality: "360p",
 	});
 }
