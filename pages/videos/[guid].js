@@ -1,12 +1,14 @@
+// [guid] - Copy.js
 import { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
-import "plyr/dist/plyr.css"; // Import Plyr styles
-import Hls from "hls.js"; // Import hls.js for HLS support
+import "plyr/dist/plyr.css";
+import Hls from "hls.js";
 
 export default function VideoPage() {
 	const router = useRouter();
-	const { guid } = router.query; // Get the video GUID from the URL
+	const { guid } = router.query;
 	const [video, setVideo] = useState(null);
+	const [currentQuality, setCurrentQuality] = useState(null);
 	const videoRef = useRef(null);
 	const playerRef = useRef(null);
 	const hlsRef = useRef(null);
@@ -14,11 +16,19 @@ export default function VideoPage() {
 	// Fetch video details based on GUID
 	useEffect(() => {
 		if (guid && router.query.sectionId) {
-			fetch(`/api/videos/${router.query.sectionId}/${guid}`) // Fetch video by sectionId and GUID
+			fetch(`/api/videos/${router.query.sectionId}/${guid}`)
 				.then((res) => res.json())
 				.then((data) => {
 					console.log("Fetched video data:", data);
 					setVideo(data);
+					// Set default quality
+					if (data.securedUrls?.length) {
+						const defaultQuality =
+							data.securedUrls.find(
+								(url) => url.quality === data.defaultQuality
+							) || data.securedUrls[0];
+						setCurrentQuality(defaultQuality);
+					}
 				})
 				.catch((error) => {
 					console.error("Error fetching video data:", error);
@@ -26,14 +36,19 @@ export default function VideoPage() {
 		}
 	}, [guid, router.query.sectionId]);
 
-	// Initialize Plyr and HLS.js
+	// Initialize Plyr and load HLS stream
 	useEffect(() => {
-		if (typeof window !== "undefined" && video && videoRef.current) {
+		if (
+			typeof window !== "undefined" &&
+			video &&
+			currentQuality &&
+			videoRef.current
+		) {
 			import("plyr")
 				.then((module) => {
 					const Plyr = module.default;
 
-					// Initialize Plyr
+					// Initialize Plyr with quality options
 					if (!playerRef.current) {
 						playerRef.current = new Plyr(videoRef.current, {
 							controls: [
@@ -48,57 +63,80 @@ export default function VideoPage() {
 								"fullscreen",
 							],
 							settings: ["quality", "speed", "loop"],
+							quality: {
+								default: currentQuality.height,
+								options: video.securedUrls.map(
+									(url) => url.height
+								),
+								forced: true,
+								onChange: (quality) => {
+									const selected = video.securedUrls.find(
+										(url) => url.height === quality
+									);
+									if (selected) {
+										setCurrentQuality(selected);
+									}
+								},
+							},
 						});
 					}
 
-					// Load HLS.js if the browser doesn't support HLS natively
-					if (Hls.isSupported()) {
-						const hls = new Hls();
-						hlsRef.current = hls;
-
-						// Attach HLS.js to the video element
-						hls.loadSource(video.securedUrl);
-						hls.attachMedia(videoRef.current);
-
-						// Handle HLS.js errors
-						hls.on(Hls.Events.ERROR, (event, data) => {
-							console.error("HLS.js error:", data);
-							if (data.fatal) {
-								switch (data.type) {
-									case Hls.ErrorTypes.NETWORK_ERROR:
-										console.error(
-											"Fatal network error encountered, try to recover"
-										);
-										hls.startLoad();
-										break;
-									case Hls.ErrorTypes.MEDIA_ERROR:
-										console.error(
-											"Fatal media error encountered, try to recover"
-										);
-										hls.recoverMediaError();
-										break;
-									default:
-										console.error(
-											"Fatal error encountered, cannot recover"
-										);
-										hls.destroy();
-										break;
-								}
+					// Load HLS stream
+					const loadHlsStream = () => {
+						if (Hls.isSupported()) {
+							if (hlsRef.current) {
+								hlsRef.current.destroy();
 							}
-						});
-					} else if (
-						videoRef.current.canPlayType(
-							"application/vnd.apple.mpegurl"
-						)
-					) {
-						// Native HLS support (e.g., Safari)
-						videoRef.current.src = video.securedUrl;
-					} else {
-						console.error("HLS is not supported in this browser.");
-						alert(
-							"Your browser does not support this video format."
-						);
-					}
+
+							const hls = new Hls();
+							hlsRef.current = hls;
+
+							hls.loadSource(currentQuality.url);
+							hls.attachMedia(videoRef.current);
+
+							hls.on(Hls.Events.ERROR, (event, data) => {
+								console.error("HLS.js error:", data);
+								if (data.fatal) {
+									switch (data.type) {
+										case Hls.ErrorTypes.NETWORK_ERROR:
+											console.error(
+												"Fatal network error encountered, try to recover"
+											);
+											hls.startLoad();
+											break;
+										case Hls.ErrorTypes.MEDIA_ERROR:
+											console.error(
+												"Fatal media error encountered, try to recover"
+											);
+											hls.recoverMediaError();
+											break;
+										default:
+											console.error(
+												"Fatal error encountered, cannot recover"
+											);
+											hls.destroy();
+											break;
+									}
+								}
+							});
+						} else if (
+							videoRef.current.canPlayType(
+								"application/vnd.apple.mpegurl"
+							)
+						) {
+							// Native HLS support (e.g., Safari)
+							videoRef.current.src = currentQuality.url;
+						} else {
+							console.error(
+								"HLS is not supported in this browser."
+							);
+							alert(
+								"Your browser does not support this video format."
+							);
+						}
+					};
+
+					loadHlsStream();
 				})
 				.catch((error) => {
 					console.error("Error loading Plyr:", error);
@@ -116,7 +154,7 @@ export default function VideoPage() {
 				playerRef.current = null;
 			}
 		};
-	}, [video]);
+	}, [video, currentQuality]);
 
 	if (!video) {
 		return <div>Loading...</div>;
@@ -137,6 +175,34 @@ export default function VideoPage() {
 			<div style={{ maxWidth: "800px", margin: "auto" }}>
 				<video ref={videoRef} className="plyr" controls />
 			</div>
+
+			{/* Manual quality selector (fallback) */}
+			{video.securedUrls?.length > 1 && (
+				<div style={{ marginTop: "10px" }}>
+					<select
+						value={currentQuality?.quality}
+						onChange={(e) => {
+							const selected = video.securedUrls.find(
+								(url) => url.quality === e.target.value
+							);
+							if (selected) setCurrentQuality(selected);
+						}}
+						style={{
+							padding: "8px",
+							borderRadius: "4px",
+							backgroundColor: "#333",
+							color: "white",
+							border: "1px solid #555",
+						}}
+					>
+						{video.securedUrls.map((url) => (
+							<option key={url.quality} value={url.quality}>
+								{url.quality}
+							</option>
+						))}
+					</select>
+				</div>
+			)}
 
 			{/* Back Button */}
 			<div style={{ marginTop: "20px" }}>
