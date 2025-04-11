@@ -6,11 +6,17 @@ export function middleware(req) {
 		"combinedmax.com",
 		"cmax-vid.vercel.app",
 	];
+
 	const requestReferer = req.headers.get("referer");
 	const host = req.headers.get("host");
 
 	console.log("Request Referer:", requestReferer);
 	console.log("Host:", host);
+
+	// Bypass referer check when running locally
+	if (host?.includes("localhost")) {
+		return NextResponse.next();
+	}
 
 	// Allow assets (JS, CSS, Images, JSON) to load
 	const assetExtensions = [
@@ -33,7 +39,7 @@ export function middleware(req) {
 		return NextResponse.next();
 	}
 
-	// Block if no referer (user typed URL manually) or referer does not contain syzygy.lk
+	// Block if no referer or unauthorized domain
 	if (
 		!requestReferer ||
 		!allowedReferer.some((domain) => requestReferer.includes(domain))
@@ -45,5 +51,5 @@ export function middleware(req) {
 }
 
 export const config = {
-	matcher: "/(.*)", // Apply middleware to all routes
+	matcher: "/(.*)",
 };
