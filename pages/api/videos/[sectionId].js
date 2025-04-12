@@ -1,36 +1,37 @@
-import jwt from "jsonwebtoken";
+// pages/api/videos/[sectionId].js
 import fs from "fs";
 import path from "path";
 
-export default async function handler(req, res) {
-	const { BUNNY_CDN_URL, BUNNY_AUTH_KEY } = process.env;
-	const { sectionId } = req.query;
+export default function handler(req, res) {
+  const { sectionId } = req.query;
 
-	// Read video data from the JSON file
-	const videosFilePath = path.join(
-		process.cwd(),
-		"public",
-		"data",
-		"videos.json"
-	);
-	const videosData = JSON.parse(fs.readFileSync(videosFilePath, "utf8"));
+  // Validate sectionId
+  if (!sectionId) {
+    return res.status(400).json({ error: "sectionId is required" });
+  }
 
-	// Get videos for the specific section
-	const videos = videosData[sectionId] || [];
+  try {
+    // Read video data
+    const videosFilePath = path.join(
+      process.cwd(),
+      "public",
+      "data",
+      "videos.json"
+    );
+    const videosData = JSON.parse(fs.readFileSync(videosFilePath, "utf8"));
 
-	// Generate secured URLs
-	const secureVideos = videos.map((video) => {
-		const token = jwt.sign(
-			{ exp: Math.floor(Date.now() / 1000) + 3600, v: video.guid },
-			BUNNY_AUTH_KEY
-		);
+    // Get videos for the requested section
+    const sectionVideos = videosData[sectionId] || [];
 
-		return {
-			title: video.title,
-			guid: video.guid,
-			securedUrl: `https://${BUNNY_CDN_URL}/${video.guid}/playlist.m3u8?token=${token}`,
-		};
-	});
+    // Return minimal necessary data for listing
+    const response = sectionVideos.map((video) => ({
+      guid: video.guid,
+      title: video.title,
+    }));
 
-	res.status(200).json(secureVideos);
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("Error reading video data:", error);
+    res.status(500).json({ error: "Failed to load video data" });
+  }
 }
