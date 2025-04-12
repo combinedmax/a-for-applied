@@ -1,12 +1,10 @@
 import jwt from "jsonwebtoken";
-import fs from "fs";
-import path from "path";
+import https from "https";
 
 export default async function handler(req, res) {
   const { BUNNY_CDN_URL, BUNNY_AUTH_KEY } = process.env;
   const { sectionId, guid } = req.query;
 
-  // Read video data
   const videosFilePath = path.join(
     process.cwd(),
     "public",
@@ -21,13 +19,11 @@ export default async function handler(req, res) {
     return res.status(404).json({ error: "Video not found" });
   }
 
-  // Generate token (4 hour validity)
   const token = jwt.sign(
     { exp: Math.floor(Date.now() / 1000) + 21600, v: guid },
     BUNNY_AUTH_KEY
   );
 
-  // Define potential resolutions
   const resolutionOptions = [
     { quality: "360p", height: 360 },
     { quality: "480p", height: 480 },
@@ -35,29 +31,35 @@ export default async function handler(req, res) {
     { quality: "1080p", height: 1080 },
   ];
 
-  // Check which video resolutions actually exist
-  const availableResolutions = resolutionOptions
-    .filter((res) => {
-      const localFilePath = path.join(
-        process.cwd(),
-        "public",
-        "videos", // Make sure this matches your actual local video directory
-        guid,
-        res.quality,
-        "video.m3u8"
-      );
-      return fs.existsSync(localFilePath);
-    })
-    .map((res) => ({
-      quality: res.quality,
-      height: res.height,
-      url: `https://${BUNNY_CDN_URL}/${guid}/${res.quality}/video.m3u8?token=${token}`,
-    }));
+  // Check Bunny CDN for available resolutions
+  const checkUrlExists = (url) => {
+    return new Promise((resolve) => {
+      https
+        .request(url, { method: "HEAD" }, (response) => {
+          resolve(response.statusCode === 200);
+        })
+        .on("error", () => resolve(false))
+        .end();
+    });
+  };
+
+  const securedUrls = [];
+  for (const resOption of resolutionOptions) {
+    const url = `https://${BUNNY_CDN_URL}/${guid}/${resOption.quality}/video.m3u8?token=${token}`;
+    const exists = await checkUrlExists(url);
+    if (exists) {
+      securedUrls.push({
+        quality: resOption.quality,
+        height: resOption.height,
+        url,
+      });
+    }
+  }
 
   res.status(200).json({
     title: video.title,
     guid: video.guid,
-    securedUrls: availableResolutions,
-    defaultQuality: availableResolutions[0]?.quality || "360p",
+    securedUrls,
+    defaultQuality: securedUrls[0]?.quality || "360p",
   });
 }
