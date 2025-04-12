@@ -27,23 +27,37 @@ export default async function handler(req, res) {
     BUNNY_AUTH_KEY
   );
 
-  // Define resolutions in order of preference (360p first)
-  const resolutions = [
+  // Define potential resolutions
+  const resolutionOptions = [
     { quality: "360p", height: 360 },
+    { quality: "480p", height: 480 },
     { quality: "720p", height: 720 },
+    { quality: "1080p", height: 1080 },
   ];
 
-  // Create secured URLs
-  const securedUrls = resolutions.map((res) => ({
-    quality: res.quality,
-    height: res.height,
-    url: `https://${BUNNY_CDN_URL}/${guid}/${res.quality}/video.m3u8?token=${token}`,
-  }));
+  // Check which video resolutions actually exist
+  const availableResolutions = resolutionOptions
+    .filter((res) => {
+      const localFilePath = path.join(
+        process.cwd(),
+        "public",
+        "videos", // Make sure this matches your actual local video directory
+        guid,
+        res.quality,
+        "video.m3u8"
+      );
+      return fs.existsSync(localFilePath);
+    })
+    .map((res) => ({
+      quality: res.quality,
+      height: res.height,
+      url: `https://${BUNNY_CDN_URL}/${guid}/${res.quality}/video.m3u8?token=${token}`,
+    }));
 
   res.status(200).json({
     title: video.title,
     guid: video.guid,
-    securedUrls,
-    defaultQuality: "360p", // Force 360p as default
+    securedUrls: availableResolutions,
+    defaultQuality: availableResolutions[0]?.quality || "360p",
   });
 }
