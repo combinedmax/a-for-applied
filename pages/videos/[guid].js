@@ -1,3 +1,4 @@
+// [guid] - Copy.js
 import { useRouter } from "next/router";
 import { useEffect, useState, useRef } from "react";
 import "plyr/dist/plyr.css";
@@ -9,7 +10,6 @@ export default function VideoPage() {
   const [video, setVideo] = useState(null);
   const [currentQuality, setCurrentQuality] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const videoRef = useRef(null);
   const playerRef = useRef(null);
   const hlsRef = useRef(null);
@@ -17,39 +17,28 @@ export default function VideoPage() {
   // Fetch video details based on GUID
   useEffect(() => {
     if (guid && router.query.sectionId) {
-      setIsLoading(true);
-      setError(null);
-
       fetch(`/api/videos/${router.query.sectionId}/${guid}`)
-        .then((res) => {
-          if (!res.ok) throw new Error("Failed to fetch video data");
-          return res.json();
-        })
+        .then((res) => res.json())
         .then((data) => {
-          if (!data.securedUrls?.length) {
-            throw new Error("No available resolutions found");
-          }
-
           setVideo(data);
           // Set default quality
-          const defaultQuality =
-            data.securedUrls.find(
-              (url) => url.quality === data.defaultQuality
-            ) || data.securedUrls[0];
-          setCurrentQuality(defaultQuality);
+          if (data.securedUrls?.length) {
+            const defaultQuality =
+              data.securedUrls.find(
+                (url) => url.quality === data.defaultQuality
+              ) || data.securedUrls[0];
+            setCurrentQuality(defaultQuality);
+          }
         })
         .catch((error) => {
           console.error("Error fetching video data:", error);
-          setError(error.message);
-        })
-        .finally(() => setIsLoading(false));
+        });
     }
   }, [guid, router.query.sectionId]);
 
-  // Load HLS stream with error recovery
+  // Load HLS stream
   const loadHlsStream = (url) => {
     setIsLoading(true);
-    setError(null);
 
     // Destroy previous HLS instance if exists
     if (hlsRef.current) {
@@ -59,11 +48,10 @@ export default function VideoPage() {
     if (Hls.isSupported()) {
       const hls = new Hls({
         enableWorker: true,
-        maxBufferLength: 15, // Reduced for faster quality switching
-        maxMaxBufferLength: 30,
-        maxBufferSize: 30 * 1000 * 1000,
-        maxBufferHole: 1.0,
-        lowLatencyMode: false,
+        maxBufferLength: 30,
+        maxMaxBufferLength: 600,
+        maxBufferSize: 60 * 1000 * 1000,
+        maxBufferHole: 5.0,
       });
       hlsRef.current = hls;
 
@@ -73,9 +61,7 @@ export default function VideoPage() {
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         setIsLoading(false);
         if (playerRef.current) {
-          playerRef.current
-            .play()
-            .catch((e) => console.log("Auto-play prevented:", e));
+          playerRef.current.play();
         }
       });
 
@@ -84,23 +70,17 @@ export default function VideoPage() {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              // Try to recover from network errors
-              if (
-                data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR ||
-                data.response?.code === 404
-              ) {
-                setError(
-                  `Resolution not available (${currentQuality?.quality})`
-                );
-              } else {
-                hls.startLoad();
-              }
+              console.error(
+                "Fatal network error encountered, trying to recover"
+              );
+              hls.startLoad();
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
+              console.error("Fatal media error encountered, trying to recover");
               hls.recoverMediaError();
               break;
             default:
-              setError("Failed to load video stream");
+              console.error("Fatal error encountered, cannot recover");
               hls.destroy();
               setIsLoading(false);
               break;
@@ -112,118 +92,85 @@ export default function VideoPage() {
       videoRef.current.src = url;
       videoRef.current.addEventListener("loadedmetadata", () => {
         setIsLoading(false);
-        videoRef.current
-          .play()
-          .catch((e) => console.log("Auto-play prevented:", e));
-      });
-      videoRef.current.addEventListener("error", () => {
-        setError("Failed to load video stream");
-        setIsLoading(false);
+        videoRef.current.play();
       });
     } else {
-      setError("Your browser does not support this video format.");
+      console.error("HLS is not supported in this browser.");
+      alert("Your browser does not support this video format.");
       setIsLoading(false);
-    }
-  };
-
-  // Handle quality changes
-  const handleQualityChange = (quality) => {
-    const selected = video.securedUrls.find((url) => url.height === quality);
-    if (selected) {
-      setCurrentQuality(selected);
     }
   };
 
   // Initialize Plyr and load initial stream
   useEffect(() => {
-    if (!video || !currentQuality || !videoRef.current) return;
+    if (
+      typeof window !== "undefined" &&
+      video &&
+      currentQuality &&
+      videoRef.current
+    ) {
+      import("plyr")
+        .then((module) => {
+          const Plyr = module.default;
 
-    let plyr;
-    import("plyr")
-      .then((module) => {
-        const Plyr = module.default;
+          // Initialize Plyr
+          if (!playerRef.current) {
+            playerRef.current = new Plyr(videoRef.current, {
+              controls: [
+                "play",
+                "rewind",
+                "fast-forward",
+                "progress",
+                "current-time",
+                "mute",
+                "volume",
+                "settings",
+                "fullscreen",
+              ],
+              settings: ["quality", "speed", "loop"],
+              quality: {
+                default: video.defaultQuality,
+                options: video.securedUrls.map((url) => url.height || 0),
+                forced: true,
+                onChange: (quality) => {
+                  const selected = video.securedUrls.find(
+                    (url) => url.height === quality
+                  );
+                  if (selected) setCurrentQuality(selected);
+                },
+              },
+            });
+          }
 
-        // Initialize Plyr
-        if (!playerRef.current) {
-          plyr = new Plyr(videoRef.current, {
-            controls: [
-              "play",
-              "progress",
-              "current-time",
-              "mute",
-              "volume",
-              "settings",
-              "fullscreen",
-            ],
-            settings: ["quality", "speed"],
-            quality: {
-              default: currentQuality.height,
-              options: video.securedUrls.map((url) => url.height),
-              forced: true,
-              onChange: handleQualityChange,
-            },
-          });
-          playerRef.current = plyr;
-        }
+          // Load initial stream
+          loadHlsStream(currentQuality.url);
+        })
+        .catch((error) => {
+          console.error("Error loading Plyr:", error);
+          setIsLoading(false);
+        });
+    }
 
-        loadHlsStream(currentQuality.url);
-      })
-      .catch((error) => {
-        console.error("Error loading Plyr:", error);
-        setIsLoading(false);
-      });
-
+    // Cleanup function
     return () => {
-      if (plyr) {
-        plyr.destroy();
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+      }
+      if (playerRef.current) {
+        playerRef.current.destroy();
       }
     };
-  }, [video]);
+  }, [video]); // Only run once when video data loads
 
   // Handle quality changes
   useEffect(() => {
-    if (currentQuality && videoRef.current) {
+    if (currentQuality && hlsRef.current) {
       loadHlsStream(currentQuality.url);
     }
   }, [currentQuality]);
 
   if (!video) {
-    return (
-      <div
-        style={{
-          textAlign: "center",
-          padding: "20px",
-          color: "white",
-          background: "black",
-          minHeight: "300px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {error ? (
-          <div>
-            <p>{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              style={{
-                background: "#ffcc00",
-                color: "black",
-                padding: "10px 20px",
-                marginTop: "10px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Retry
-            </button>
-          </div>
-        ) : (
-          <div>Loading video data...</div>
-        )}
-      </div>
-    );
+    return <div>Loading video data...</div>;
   }
 
   return (
@@ -234,50 +181,9 @@ export default function VideoPage() {
         color: "white",
         background: "black",
         position: "relative",
-        minHeight: "100vh",
       }}
     >
-      <h1 style={{ marginBottom: "20px" }}>{video.title}</h1>
-
-      {/* Error message */}
-      {error && (
-        <div
-          style={{
-            padding: "15px",
-            background: "#ff3333",
-            color: "white",
-            borderRadius: "5px",
-            marginBottom: "20px",
-            maxWidth: "800px",
-            margin: "0 auto 20px",
-          }}
-        >
-          {error}
-          {error.includes("not available") && (
-            <button
-              onClick={() => {
-                // Try to switch to lowest available quality
-                const lowestQuality = video.securedUrls.reduce((prev, curr) =>
-                  prev.height < curr.height ? prev : curr
-                );
-                setCurrentQuality(lowestQuality);
-                setError(null);
-              }}
-              style={{
-                background: "white",
-                color: "black",
-                padding: "5px 10px",
-                marginLeft: "10px",
-                border: "none",
-                borderRadius: "3px",
-                cursor: "pointer",
-              }}
-            >
-              Switch to {video.securedUrls[0].quality}
-            </button>
-          )}
-        </div>
-      )}
+      <h1 style={{ marginBottom: "10px" }}>{video.title}</h1>
 
       {/* Loading overlay */}
       {isLoading && (
@@ -293,13 +199,9 @@ export default function VideoPage() {
             alignItems: "center",
             justifyContent: "center",
             zIndex: 10,
-            flexDirection: "column",
           }}
         >
-          <div>Loading {currentQuality?.quality} resolution...</div>
-          <div style={{ marginTop: "10px", fontSize: "0.9em" }}>
-            If stuck, try a lower quality
-          </div>
+          <div>Switching to {currentQuality?.quality}...</div>
         </div>
       )}
 
@@ -307,7 +209,7 @@ export default function VideoPage() {
       <div
         style={{
           maxWidth: "800px",
-          margin: "0 auto",
+          margin: "auto",
           position: "relative",
         }}
       >
@@ -315,24 +217,22 @@ export default function VideoPage() {
           ref={videoRef}
           className="plyr"
           controls
-          style={{ width: "100%", background: "#000" }}
-          playsInline
+          style={{ width: "100%" }}
         />
       </div>
 
       {/* Back Button */}
-      <div style={{ marginTop: "30px" }}>
+      <div style={{ marginTop: "20px" }}>
         <button
           onClick={() => router.push(`/sections/${router.query.sectionId}`)}
           style={{
             background: "#ffcc00",
             color: "black",
-            padding: "12px 24px",
+            padding: "10px 20px",
             border: "none",
             borderRadius: "5px",
             cursor: "pointer",
             fontWeight: "bold",
-            fontSize: "1em",
           }}
           disabled={isLoading}
         >
