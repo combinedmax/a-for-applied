@@ -129,14 +129,16 @@ export default function VideoPage() {
               ],
               settings: ["quality", "speed", "loop"],
               quality: {
-                default: video.defaultQuality,
-                options: video.securedUrls.map((url) => url.height || 0),
+                default: currentQuality.height,
+                options: video.securedUrls.map((url) => url.height),
                 forced: true,
                 onChange: (quality) => {
                   const selected = video.securedUrls.find(
                     (url) => url.height === quality
                   );
-                  if (selected) setCurrentQuality(selected);
+                  if (selected) {
+                    setCurrentQuality(selected);
+                  }
                 },
               },
             });
