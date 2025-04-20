@@ -10,14 +10,11 @@
   },
   "dependencies": {
     "hls.js": "^1.5.20",
-    "indigo-player": "^1.5.1",
     "jsonwebtoken": "^9.0.2",
     "next": "^15.2.2",
     "plyr": "^3.7.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "shaka-player": "^4.14.0",
-    "shaka-player-ui-controls": "^1.0.11",
     "video.js": "^8.22.0",
     "videojs-contrib-eme": "^5.5.1"
   },

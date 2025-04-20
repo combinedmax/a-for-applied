@@ -172,5 +172,49 @@
 			"title": "27T P01 Video 2",
 			"guid": "53ac339b-48c7-48e7-b0ba-f9704492a64e"
 		}
+	],
+	"section10": [
+		{
+			"title": "P17.2 Video 1",
+			"guid": "b0523753-50fa-4b74-9065-99f1f9973fdb"
+		},
+		{
+			"title": "P17.2 Video 2",
+			"guid": "6c9b9d28-ef42-49e5-8e43-2df50db6a511"
+		},
+		{
+			"title": "P17.2 Video 3",
+			"guid": "483c09f9-7253-4792-be23-6679bfd93a4f"
+		}
+	],
+	"section11": [
+		{
+			"title": "P17.3 Video 1",
+			"guid": "284b3bfa-7a82-439a-86cd-8725071f7bbb"
+		},
+		{
+			"title": "P17.3 Video 2",
+			"guid": "aa91a3ed-c72c-4096-b9c5-3f395810d935"
+		},
+		{
+			"title": "P17.3 Video 3",
+			"guid": "e669ad88-b7ed-4c49-b60a-7acb038fb32b"
+		},
+		{
+			"title": "P17.3 Video 4",
+			"guid": "2c282b1e-727a-4104-a124-cbfc797b7574"
+		},
+		{
+			"title": "P17.3 Video 5",
+			"guid": "6c1a0542-5b3c-48bf-afa7-e6c199c5dae7"
+		},
+		{
+			"title": "P17.3 Video 6",
+			"guid": "d4b22679-14af-4ab0-800c-29aa96b194f5"
+		},
+		{
+			"title": "P17.3 Video 7",
+			"guid": "01e51542-a293-4458-99c7-881cb473872a"
+		}
 	]
 }
