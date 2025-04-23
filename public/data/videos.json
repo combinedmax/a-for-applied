@@ -165,11 +165,11 @@
 	],
 	"section9": [
 		{
-			"title": "27T P01 Video 1",
+			"title": "Video 1",
 			"guid": "f1718ea3-d2bf-4e9b-b15c-99b47afd235d"
 		},
 		{
-			"title": "27T P01 Video 2",
+			"title": "Video 2",
 			"guid": "53ac339b-48c7-48e7-b0ba-f9704492a64e"
 		}
 	],
@@ -215,6 +215,20 @@
 		{
 			"title": "P17.3 Video 7",
 			"guid": "01e51542-a293-4458-99c7-881cb473872a"
+		}
+	],
+	"section12": [
+		{
+			"title": "Video 1",
+			"guid": "5b2f96f0-f2b4-4a92-8695-b049862f0c84"
+		},
+		{
+			"title": "Video 2",
+			"guid": "3a4f8efc-6743-445e-af3d-c01eac550b17"
+		},
+		{
+			"title": "Video 3",
+			"guid": "d9be3ec0-af3b-4e49-bc6b-e1af8895bf92"
 		}
 	]
 }
