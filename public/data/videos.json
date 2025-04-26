@@ -230,5 +230,19 @@
 			"title": "Video 3",
 			"guid": "d9be3ec0-af3b-4e49-bc6b-e1af8895bf92"
 		}
+	],
+	"section13": [
+		{
+			"title": "Video 1",
+			"guid": "ab9dd748-704f-4a4c-85d8-0442ddd7987e"
+		},
+		{
+			"title": "Video 2",
+			"guid": "6182b2f7-99c6-466c-ba8c-5dc14ec91b07"
+		},
+		{
+			"title": "Video 3",
+			"guid": "9a66ad24-2c5e-4ba0-be9a-d03c3cf6c648"
+		}
 	]
 }
