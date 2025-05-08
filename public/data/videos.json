@@ -278,5 +278,15 @@
 			"title": "V2 May 02",
 			"guid": "c794b7e5-cc13-4919-bc11-9315f2fa841f"
 		}
+	],
+	"section17": [
+		{
+			"title": "Video 1",
+			"guid": "da2a422d-7a66-4ba4-9ac7-ca3336ab757b"
+		},
+		{
+			"title": "Video 2",
+			"guid": "92260fee-fdef-425c-87e6-13d1a657d345"
+		}
 	]
 }
