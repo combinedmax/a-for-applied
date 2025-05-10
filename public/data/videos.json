@@ -277,6 +277,18 @@
 		{
 			"title": "V2 May 02",
 			"guid": "c794b7e5-cc13-4919-bc11-9315f2fa841f"
+		},
+		{
+			"title": "V3 May 09",
+			"guid": "6b2e2616-98f5-472f-9ca9-d3f90479534e"
+		},
+		{
+			"title": "V4 May 09",
+			"guid": "9e82047a-ed92-4f03-8e7d-3bede253a22e"
+		},
+		{
+			"title": "V5 May 09",
+			"guid": "b3ffe6f6-89b4-4ff3-9b20-84f83ebb6827"
 		}
 	],
 	"section17": [
@@ -287,6 +299,12 @@
 		{
 			"title": "Video 2",
 			"guid": "92260fee-fdef-425c-87e6-13d1a657d345"
+		}
+	],
+	"section18": [
+		{
+			"title": "Video 1",
+			"guid": "04e2e3c7-4c02-49e9-85ca-692bbd73a429"
 		}
 	]
 }
