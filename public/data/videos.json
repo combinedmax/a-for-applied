@@ -416,5 +416,31 @@
 			"title": "Video 5",
 			"guid": "6ec9155b-bf5c-45cf-b084-6d7e3ec89d72"
 		}
+	],
+	"section24": [
+		{
+			"title": "Video 1",
+			"guid": "18634af6-4379-482f-ba3c-b76271c47355"
+		},
+		{
+			"title": "Video 2",
+			"guid": "e4e6ce54-02fe-4624-a144-715f00093a06"
+		},
+		{
+			"title": "Video 3",
+			"guid": "f4182bf6-cbfe-421c-bf61-113e350a7b8d"
+		},
+		{
+			"title": "Video 4",
+			"guid": "038a7e16-dce0-4066-8a11-1efb3d1855e5"
+		},
+		{
+			"title": "Video 5",
+			"guid": "d77eb225-90e0-47c7-bb4a-901832d82d1c"
+		},
+		{
+			"title": "Video 6",
+			"guid": "fc7cb0ed-fd1d-4426-bf6e-221ddde0dabb"
+		}
 	]
 }
