@@ -289,6 +289,18 @@
 		{
 			"title": "V5 May 09",
 			"guid": "b3ffe6f6-89b4-4ff3-9b20-84f83ebb6827"
+		},
+		{
+			"title": "V6 May 16",
+			"guid": "ec917df2-ce87-4b37-bd4e-4fc417e1724f"
+		},
+		{
+			"title": "V7 May 16",
+			"guid": "a07acbf9-a907-42b7-80d5-8711b723c79b"
+		},
+		{
+			"title": "V8 May 16",
+			"guid": "402f6bc4-308b-4ea0-ab65-5008ff1f7307"
 		}
 	],
 	"section17": [
@@ -377,6 +389,10 @@
 		{
 			"title": "V2 May 14",
 			"guid": "d3100f6b-b548-4630-953f-41db1137bbdc"
+		},
+		{
+			"title": "V3 May 14",
+			"guid": "75b8f13c-f203-4bea-8261-bb4ef8e4ae9d"
 		}
 	],
 	"section23": [
