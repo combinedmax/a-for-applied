@@ -678,5 +678,15 @@
 			"title": "May 23 V3",
 			"guid": "b8ced93f-6da2-454d-a09e-1cc0683b45bb"
 		}
+	],
+	"section31": [
+		{
+			"title": "Video 1",
+			"guid": "9ce2903d-e194-42f0-b971-fc5c553335d1"
+		},
+		{
+			"title": "Video 2",
+			"guid": "a5c5fa24-a851-4715-988c-30588df1842d"
+		}
 	]
 }
