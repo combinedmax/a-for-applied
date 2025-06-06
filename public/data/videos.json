@@ -754,5 +754,15 @@
 			"title": "Video 13",
 			"guid": "50073bf2-13bf-4689-a6fe-268d12d734dc"
 		}
+	],
+	"section33": [
+		{
+			"title": "Video 1",
+			"guid": "aa6caedd-636c-45ae-b2ea-2ca4247975ae"
+		},
+		{
+			"title": "Video 2",
+			"guid": "56886d4d-cd7e-4cf0-8639-d7aa526ee31d"
+		}
 	]
 }
