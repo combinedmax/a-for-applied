@@ -782,5 +782,19 @@
 			"title": "Video 1",
 			"guid": "89ab7ec1-9301-45ce-9a9a-a47bf3c11a8b"
 		}
+	],
+	"section37": [
+		{
+			"title": "June 06 V1",
+			"guid": "4a1c5df1-3e5e-4df8-b259-b7d3abb1b8ce"
+		},
+		{
+			"title": "June 06 V2",
+			"guid": "f16b58d4-e1f3-42df-8657-a090c3d9c178"
+		},
+		{
+			"title": "June 06 V3",
+			"guid": "e41e0741-af0f-400e-8f0d-071cf5dd4c91"
+		}
 	]
 }
