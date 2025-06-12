@@ -796,5 +796,19 @@
 			"title": "June 06 V3",
 			"guid": "e41e0741-af0f-400e-8f0d-071cf5dd4c91"
 		}
+	],
+	"section38": [
+		{
+			"title": "Video 1",
+			"guid": "59db7c72-3ce4-4104-a39d-65976e46c11f"
+		},
+		{
+			"title": "Video 2",
+			"guid": "a71e575d-57b1-4217-9476-6652e342a4f3"
+		},
+		{
+			"title": "Video 3",
+			"guid": "33e1207b-e223-438e-b9fb-b9455d92b770"
+		}
 	]
 }
