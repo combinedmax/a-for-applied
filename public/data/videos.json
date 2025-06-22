@@ -811,6 +811,18 @@
 		{
 			"title": "June 13 V3",
 			"guid": "3a9d2a7e-4240-4c7b-aa87-cb5a5eea2394"
+		},
+		{
+			"title": "June 20 V1",
+			"guid": "39c20c84-ffe7-4b1f-a376-58d2b0ffd622"
+		},
+		{
+			"title": "June 20 V2",
+			"guid": "fbb7fb56-e103-4dc4-8d47-9b04cbf0c10a"
+		},
+		{
+			"title": "June 20 V3",
+			"guid": "433ea0af-d5c7-4b86-9833-66f0625a906f"
 		}
 	],
 	"section38": [
@@ -831,6 +843,12 @@
 		{
 			"title": "Video 1",
 			"guid": "bfceca57-aa34-481d-b263-bf36c179d4d2"
+		}
+	],
+	"section40": [
+		{
+			"title": "Video 1",
+			"guid": "f89c54cc-4b54-4be7-9f3f-7fe337a98c9c"
 		}
 	]
 }
