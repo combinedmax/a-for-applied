@@ -886,5 +886,15 @@
 			"title": "Video 1",
 			"guid": "b242a6da-f310-4518-87e7-06bec18fda4d"
 		}
+	],
+	"section43": [
+		{
+			"title": "V1 June 27",
+			"guid": "a3d54167-278a-49ba-82cc-6cef66e80e51"
+		},
+		{
+			"title": "V2 June 27",
+			"guid": "9738c1f4-7a89-4c9a-bd2f-d56482b1518a"
+		}
 	]
 }
