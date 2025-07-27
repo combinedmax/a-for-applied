@@ -14,5 +14,33 @@
 	{
 		"id": "a11ad01",
 		"name": "A11a Velocity-Time Graphs | July 21"
+	},
+	{
+		"id": "shm-part-1",
+		"name": "A for Applied | A13 | Simple Harmonic Motion | Part 1"
+	},
+	{
+		"id": "shm-part-2",
+		"name": "A for Applied | A13 | Simple Harmonic Motion | Part 2"
+	},
+	{
+		"id": "cog-part-1",
+		"name": "A for Applied | A16 | Center of Gravity | Part 1"
+	},
+	{
+		"id": "cog-part-2",
+		"name": "A for Applied | A16 | Center of Gravity | Part 2"
+	},
+	{
+		"id": "sta-part-1",
+		"name": "A for Applied | A17b | Statistics | Part 1"
+	},
+	{
+		"id": "sta-part-2",
+		"name": "A for Applied | A17b | Statistics | Part 2"
+	},
+	{
+		"id": "prb",
+		"name": "A for Applied | A17a | Probability"
 	}
 ]
